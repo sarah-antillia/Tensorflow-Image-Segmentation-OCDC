@@ -1,12 +1,21 @@
-<h2>Tensorflow-Tiled-Image-Segmentation-OCDC (2024/05/06)</h2>
+<h2>Tensorflow-Tiled-Image-Segmentation-OCDC (Updated:2024/06/12)</h2>
+<li>2024/06/12: Added <a href="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/">
+<b>mini_oscc_test</b></a> dataset for Tile-Image-Segmentation.
+</li>
+<li>2024/06/12: Added <b>[tiledinfer]</b> section to <a href="./projects/TensorflowSlightlyFlexibleUNet/OCDC/train_eval_infer.config">
+train_eval_infer.config</a> for the tiled inference.
+</li>
+<br>
 
 This is the first experimental Image Segmentation project for OCDC (Oral Cavity Derived Cancer) based on
 the <a href="https://github.com/sarah-antillia/Tensorflow-Image-Segmentation-API">Tensorflow-Image-Segmentation-API</a>, and
 <a href="https://drive.google.com/file/d/1vhCpb8V5vnBwNRKGk6HhFjpoUFOg2laX/view?usp=sharing">OCDC-ImageMask-Dataset-V1.zip</a>.
 <br>
-
+<br>
+Please see also <a href="https://github.com/sarah-antillia/ImageMask-Dataset-OCDC">ImageMask-Dataset-OCDC</a>
+<br>
 <hr>
-Actual Image Segmentation Sample for an image.<br>
+Actual Image Segmentation Examples.<br>
 <table>
 <tr>
 <th>Input: image</th>
@@ -14,11 +23,17 @@ Actual Image Segmentation Sample for an image.<br>
 <th>Prediction: inferred_mask</th>
 </tr>
 <tr>
-<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test/images/1009009_r35c8.jpg" width="320" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test/images/1009009_r31c1.jpg" width="320" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test/masks/1009009_r31c1.jpg" width="320" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test_output/1009009_r31c1.jpg" width="320" height="auto"></td>
+</tr>
 
+<tr>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test/images/1009009_r35c8.jpg" width="320" height="auto"></td>
 <td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test/masks/1009009_r35c8.jpg" width="320" height="auto"></td>
 <td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_test_output/1009009_r35c8.jpg" width="320" height="auto"></td>
 </tr>
+
 </table>
 
 <hr>
@@ -39,9 +54,10 @@ you may try other Tensorflow UNet Models:<br>
 
 <h3>1. Dataset Citation</h3>
 
-The dataset used here has been taken from the following <a href="https://data.mendeley.com/datasets/9bsc36jyrt/1">
+The <b>OCDC</b> dataset used here has been taken from the following 
+<a href="https://data.mendeley.com/datasets/9bsc36jyrt/1">
 Mendeley Data<br>
-H&E-stained oral squamous cell carcinoma histological images dataset</a>.<br>
+<b>H&E-stained oral squamous cell carcinoma histological images dataset</b></a>.<br>
 
 <pre>
 Freire, Dalí; Faria, Paulo; Loyola, Adriano; Cardoso, Sergio; 
@@ -49,11 +65,28 @@ Travencolo, Bruno; do Nascimento, Marcelo (2022),
 “H&E-stained oral squamous cell carcinoma histological images dataset”, 
 Mendeley Data, V1, doi: 10.17632/9bsc36jyrt.1
 </pre>
+Licence: CC BY 4.0<br>
 
 Please see also:<a href="https://data.mendeley.com/datasets/9bsc36jyrt/1/files/33368887-7fb7-4422-bf1e-c33c16104051">
 MendeleyData_OCDC_2022.pdf</a>
 <br>
+<br>
+The <b>mini_oscc_test</b> dataset used here has been taken from the following
+<a href="https://data.mendeley.com/datasets/ftmp4cvtmb/2">
+Mendeley Data<br>
+<b>
+Histopathological imaging database for Oral Cancer analysis
+</b>
+</a>
+<pre>
+Published: 9 January 2023 Version 2
 
+DOI:10.17632/ftmp4cvtmb.2
+Contributors:
+Tabassum Yesmin Rahman,Lipi B. Mahanta,Anup K. Das,Jagannath D. Sarma
+</pre>
+Licence :CC BY 4.0<br>
+This is the image classification dataset for Oral Cancer, so it has no mask dataset for image segmentation.<br>
 <br>
 
 <h3>
@@ -110,7 +143,7 @@ Please move to ./projects/OCDC and run the following bat file.<br>
 <pre>
 ; train_eval_infer.config
 ; 2024/05/05 (C) antillia.com
-
+; 2024/06/12 Added [tiledinfer] section
 [model]
 model         = "TensorflowUNet"
 generator     = False
@@ -160,6 +193,12 @@ output_dir    = "./mini_test_output"
 ;binarize      = True
 sharpening   = True
 
+[tiledinfer] 
+overlapping   = 128
+images_dir    = "./mini_oscc_test/images"
+output_dir    = "./mini_oscc_test_output"
+sharpening   = True
+
 [segmentation]
 colorize      = False
 black         = "black"
@@ -170,6 +209,7 @@ blursize      = None
 blur      = True
 blur_size = (3,3)
 binarize  = True
+;
 threshold = 127
 </pre>
 
@@ -194,6 +234,7 @@ and run the following bat file to evaluate TensorflowUNet model for OCDC.<br>
 <pre>
 ./2.evaluate.bat
 </pre>
+This bat file simply runs the following command.
 <pre>
 python ../../../src/TensorflowUNetEvaluator.py ./train_eval_infer_aug.config
 </pre>
@@ -215,6 +256,7 @@ Please move to a <b>./projects/TensorflowSlightlyFlexibleUNet/OCDC</b> folder<br
 <pre>
 ./3.infer.bat
 </pre>
+This simply runs the following command.
 <pre>
 python ../../../src/TensorflowUNetInferencer.py ./train_eval_infer_aug.config
 </pre>
@@ -270,6 +312,72 @@ Inferred test masks<br>
 </tr>
 
 </table>
+<br>
+<br>
+<!--
+  -->
+
+<h3>
+7 Tiled Inference
+</h3>
+Please move to a <b>./projects/TensorflowSlightlyFlexibleUNet/OCDC</b> folder<br>
+,and run the following bat file to tiled-infer segmentation regions for 2K size 
+<a href="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/">
+<b>mini_oscc_test/images</b></a>
+ by the Trained-TensorflowUNet model for OCDC.<br>
+<pre>
+./4.tiledinfer.bat
+</pre>
+This simply runs the following command.
+<pre>
+python ../../../src/TensorflowUNetTiledInferencer.py ./train_eval_infer_aug.config
+</pre>
+<hr>
+mini_oscc_test_images<br>
+<img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/asset/mini_oscc_test_images.png" width="1024" height="auto"><br>
+
+<br>
+Tiled-Inferred mini_oscc_test<br>
+<img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/asset/mini_oscc_test_output.png" width="1024" height="auto"><br>
+<br>
+
+<hr>
+<b>Enlarged images and masks </b><br>
+Please note that this mini_oscc_test has no mask (ground_truth) dataset.<br>
+<table>
+<tr>
+<th>Image</th>
+<th>Inferred-mask</th>
+</tr>
+
+<tr>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/OSCC_400x_1.jpg" width="480" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test_output/OSCC_400x_1.jpg" width="480" height="auto"></td>
+</tr>
+
+<tr>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/OSCC_400x_11.jpg" width="480" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test_output/OSCC_400x_11.jpg" width="480" height="auto"></td>
+</tr>
+
+
+<tr>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/OSCC_400x_14.jpg" width="480" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test_output/OSCC_400x_14.jpg" width="480" height="auto"></td>
+</tr>
+
+
+<tr>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/OSCC_400x_401.jpg" width="480" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test_output/OSCC_400x_401.jpg" width="480" height="auto"></td>
+</tr>
+<tr>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/OSCC_400x_402.jpg" width="480" height="auto"></td>
+<td><img src="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test_output/OSCC_400x_402.jpg" width="480" height="auto"></td>
+</tr>
+
+</table>
+<hr>
 <br>
 <br>
 
