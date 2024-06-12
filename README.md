@@ -1,6 +1,6 @@
 <h2>Tensorflow-Tiled-Image-Segmentation-OCDC (Updated:2024/06/12)</h2>
 <li>2024/06/12: Added <a href="./projects/TensorflowSlightlyFlexibleUNet/OCDC/mini_oscc_test/images/">
-<b>mini_oscc_test</b></a> dataset for Tile-Image-Segmentation.
+<b>mini_oscc_test</b></a> dataset for Tiled-Image-Segmentation.
 </li>
 <li>2024/06/12: Added <b>[tiledinfer]</b> section to <a href="./projects/TensorflowSlightlyFlexibleUNet/OCDC/train_eval_infer.config">
 train_eval_infer.config</a> for the tiled inference.
@@ -347,7 +347,7 @@ Please note that this mini_oscc_test has no mask (ground_truth) dataset.<br>
 <table>
 <tr>
 <th>Image</th>
-<th>Inferred-mask</th>
+<th>Tiled-inferred-mask</th>
 </tr>
 
 <tr>
